@@ -1,0 +1,6 @@
+include "icloudportal-common"
+include "icloudportal-gradle"
+include "icloudportal-shell"
+include "icloudportal-test"
+include "icloudportal-core"
+include "icloudportal-web"
