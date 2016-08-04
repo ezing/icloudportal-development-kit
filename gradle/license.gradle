@@ -1,0 +1,70 @@
+buildscript {
+	repositories icpdkRepos
+	dependencies {
+		classpath libs.plugin_license
+	}
+}
+
+def findHeaderFile(p) {
+	for (dir in [".", "..", "${p.rootDir}", "${p.rootDir}/src/license"]) {
+		if (p.file("${dir}/header.txt").exists()) {
+			return p.file("${dir}/header.txt")
+		}
+	}
+	return p.file("src/license/header.txt")
+}
+
+apply plugin: nl.javadude.gradle.plugins.license.LicensePlugin
+
+license {
+
+	header findHeaderFile(project)
+
+	ignoreFailures true
+
+	mapping {
+		java = 'JAVADOC_STYLE'
+		groovy = 'JAVADOC_STYLE'
+		scala = 'JAVADOC_STYLE'
+		javascript = 'JAVADOC_STYLE'
+	}
+
+	ext.product = "iCloudPortal Business Solutions"
+	ext.inception = "2016"
+	ext.year = Calendar.getInstance().get(Calendar.YEAR)
+	ext.owner = "icloudportal.com"
+	ext.website = "http://icloudportal.com"
+
+	include "**/*.java"
+	include "**/*.groovy"
+	include "**/*.scala"
+	include "**/*.js"
+	include "**/*.css"
+
+	excludes(["**/LICENSE", "**/LICENSE.md"])
+	excludes(["**/README", "**/README.md"])
+	excludes(["**/*.properties", "**/*.txt", "**/*.json"])
+}
+
+afterEvaluate {
+	tasks.findAll { it.class.simpleName.startsWith 'License' }.each {
+
+		it.onlyIf { license.header && license.header.exists() }
+
+		def src = fileTree(dir: 'src', excludes: [
+			"**/data/**",
+			"**/data-init/**",
+			"**/data-demo/**",
+			"**/resources/**",
+			"**/webapp/lib/**",
+			"**/webapp/WEB-INF/web.xml"
+		])
+
+		def gen = fileTree('build/src-gen') {
+			include '**/*.java'
+			include '**/*.groovy'
+		}
+
+		it.source = files([src, gen])
+	}
+}

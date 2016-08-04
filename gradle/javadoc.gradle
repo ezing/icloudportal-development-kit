@@ -1,0 +1,77 @@
+
+task generateDocs(type: Javadoc) {
+
+	description "Generate API docs."
+	group "iCloudPortal"
+
+	destinationDir = file("${buildDir}/docs")
+	failOnError = false
+
+	exclude '**/internal/**'
+	exclude '**/*Impl.java'
+
+	include '**/com/icloudportal/common/**'
+	include '**/com/icloudportal/app/**'
+
+	include '**/com/icloudportal/auth/AuditableRunner.java'
+	include '**/com/icloudportal/auth/AuthModule.java'
+	include '**/com/icloudportal/auth/AuthService.java'
+	include '**/com/icloudportal/auth/AuthUtils.java'
+	include '**/com/icloudportal/auth/db/**'
+
+	include '**/com/icloudportal/data/**'
+	include '**/com/icloudportal/data/adapter/Adapter.java'
+	exclude '**/com/icloudportal/data/AuditHelper.java'
+	exclude '**/com/icloudportal/data/DataScriptHelper.java'
+	exclude '**/com/icloudportal/data/**/ElementConverter.java'
+
+	include '**/com/icloudportal/db/**'
+	exclude '**/com/icloudportal/db/JPA.java'
+	exclude '**/com/icloudportal/db/JpaClassLoader.java'
+
+	include '**/com/icloudportal/dms/**'
+	include '**/com/icloudportal/i18n/**'
+	exclude '**/com/icloudportal/i18n/I18nInterpolator.java'
+	include '**/com/icloudportal/inject/**'
+
+	include '**/com/icloudportal/mail/**'
+	exclude '**/com/icloudportal/mail/web/**'
+
+	include '**/com/icloudportal/meta/MetaFiles.java'
+	include '**/com/icloudportal/meta/db/**'
+
+	include '**/com/icloudportal/quartz/**'
+	include '**/com/icloudportal/report/**'
+
+	include '**/com/icloudportal/rpc/**'
+	exclude '**/com/icloudportal/rpc/Resource.java'
+	exclude '**/com/icloudportal/rpc/RequestFilter.java'
+	exclude '**/com/icloudportal/rpc/ObjectMapperProvider.java'
+	exclude '**/com/icloudportal/rpc/ResponseInterceptor.java'
+
+	include '**/com/icloudportal/script/**'
+	include '**/com/icloudportal/text/**'
+
+	options.links = [
+		'https://docs.oracle.com/javaee/7/api',
+		'https://docs.oracle.com/javase/7/docs/api',
+		'http://google.github.io/guice/api-docs/4.0/javadoc',
+		'http://google.github.io/guava/releases/18.0/api/docs/',
+		'http://docs.jboss.org/hibernate/orm/4.2/javadocs',
+		'http://www.joda.org/joda-time/apidocs',
+		'https://www.quartz-scheduler.org/api/2.2.1',
+		'http://help.eclipse.org/mars/topic/org.eclipse.birt.doc.isv/model/api',
+		'http://help.eclipse.org/mars/topic/org.eclipse.birt.doc.isv/engine/api'
+	]
+
+	doFirst {
+		title = "iCloudPortal Development Kit $version API"
+	}
+}
+
+subprojects {
+	rootProject.tasks.generateDocs {
+		source sourceSets.main.allJava
+		classpath = files(sourceSets.main.compileClasspath)
+	}
+}

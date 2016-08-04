@@ -1,0 +1,22 @@
+def icpdkRepo = new File(buildscript.sourceFile.parentFile.parentFile, "maven")
+
+ext.icpdkPlugins = {
+	fileTree(dir: "${buildscript.sourceFile.parentFile}/libs", include: '*.jar')
+}
+
+ext.icpdkRepos = {
+	maven {
+		name "icpdk"
+		url "file://${icpdkRepo}"
+	}
+	maven {
+		name "axelor-nexus"
+		url	"http://repository.axelor.com/nexus/content/groups/public/"
+	}
+	jcenter()
+	mavenCentral()
+	mavenLocal()
+}
+
+project.repositories icpdkRepos
+project.buildscript.repositories icpdkRepos
