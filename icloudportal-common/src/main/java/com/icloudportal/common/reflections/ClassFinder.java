@@ -84,7 +84,7 @@ public final class ClassFinder<T> {
 	/**
 	 * 当多次调用{@link #having(Class)}是, 是否只检测一个注解(默认是检测所有注解).
 	 * 
-	 * @return same class finder instance
+	 * @return 类查找实例
 	 */
 	public ClassFinder<T> any() {
 		this.matchAll = false;
